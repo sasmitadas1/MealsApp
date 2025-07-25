@@ -4,26 +4,48 @@ import MealDetails from "../components/MealDetails";
 import SubTitle from "../components/MealDetail/SubTitle";
 import List from "../components/MealDetail/List";
 import { ScrollView } from "react-native";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import IconButton from "../components/IconButton";
+// import { FavoritesContext } from "../../store/context/Favorites-context";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, removeFavorite } from "../../store/redux/favorites";
 
 function MealDetailScreen({ route, navigation }) {
+  // const favoriteMealsCtx = useContext(FavoritesContext);
+
+  const favoriteMealIds = useSelector((state) => state.favoriteMeal.ids);
+
+  const dispatch = useDispatch();
+
   const mealId = route.params.mealId;
-console.log(mealId,"mealId.....");
 
   const selectedMeal = MEALS.find((meal) => meal.id == mealId);
 
-  function headerButtonPressHandler() {
-    console.log("pressed");
+  // const mealsFavorite = favoriteMealsCtx.ids.includes(mealId);
+  const mealsFavorite = favoriteMealIds.includes(mealId);
+
+  function changeFavoriteStatusHandler() {
+    if (mealsFavorite) {
+      // favoriteMealsCtx.removeFavorite(mealId);
+      dispatch(removeFavorite({ id: mealId }));
+    }
+    // favoriteMealsCtx.addFavorite(mealId);
+    else dispatch(addFavorite({ id: mealId }));
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <IconButton icon='star' color='white' onPress={headerButtonPressHandler} />;
+        return (
+          <IconButton
+            icon={mealsFavorite ? "star" : "star-outline"}
+            color="white"
+            onPress={changeFavoriteStatusHandler}
+          />
+        );
       },
     });
-  }, [navigation, headerButtonPressHandler]);
+  }, [navigation, changeFavoriteStatusHandler]);
   return (
     <ScrollView style={styles.rootContainer}>
       <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />

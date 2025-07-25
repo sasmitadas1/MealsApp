@@ -3,6 +3,8 @@ import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTitle from "../components/CategoryGridTitle";
 
  function CategoriesScreen({ navigation }) {
+
+  
   function renderCategoryItem(itemData) {
     function pressHandler() {
       navigation.navigate("MealsOverviewScreen", {
