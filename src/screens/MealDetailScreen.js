@@ -14,7 +14,7 @@ console.log(mealId,"mealId.....");
   const selectedMeal = MEALS.find((meal) => meal.id == mealId);
 
   function headerButtonPressHandler() {
-    console.log("pressed1");
+    console.log("pressed");
   }
 
   useLayoutEffect(() => {
